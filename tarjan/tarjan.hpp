@@ -123,7 +123,7 @@ struct TarjanData {
          * 
          * @param graph The graph on which Tarjan's algorithm will be applied.
          */
-        
+
         TarjanData(const AdjGraph &graph);
         ~TarjanData();
 };

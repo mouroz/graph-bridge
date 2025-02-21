@@ -1,4 +1,5 @@
 #include "tarjan.hpp"
+#include "graph_reader.hpp"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -13,9 +14,14 @@
 #include <string>
 
 
-
 typedef std::vector<std::vector<int>> AdjGraph;
 typedef std::vector<std::pair<int,int>> EdgeVector;
+
+
+
+
+
+
 
 bool randomBoolean(float trueChance) {
     // Use random_device and mt19937 for a better random number generator
@@ -63,9 +69,6 @@ std::string edgelist_to_string(EdgeVector list) {
 
     return s.str();
 }
-
-
-
 
 
 void create_random_graph_log(const std::string& s) {
@@ -118,9 +121,6 @@ TarjanData::~TarjanData() {
 
 
 
-
-void _dfs(TarjanData *argsPtr, int v, int parent);
-
 EdgeVector tarjan(AdjGraph &graph) {
     TarjanData args(graph);
 
@@ -163,9 +163,21 @@ void _dfs(TarjanData *argsPtr, int v, int parent) {
 
 
 
+
 int main() {
-    AdjGraph graph = create_random_graph(10, 0.3);
-    //std::cout << adjgraph_to_string(graph);
+    std::ifstream file("ex1.txt");
+
+    if (!file) {
+        std::cerr << "Error opening file!" << std::endl;
+        return 1;
+    }
+
+    AdjGraph graph = read_graph_from_file(file);
+    std::cout << adjgraph_to_string(graph);
+
+
+    // AdjGraph graph = create_random_graph(10, 0.3);
+    // std::cout << adjgraph_to_string(graph);
 
     // TarjanData data(10);
     // data.visited[0] = 1;
@@ -180,4 +192,3 @@ int main() {
     std::cout << edgelist_to_string(bridges);
 
 }
-
