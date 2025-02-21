@@ -1,4 +1,5 @@
 #include "tarjan.hpp"
+#include "graph_reader.cpp"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -45,10 +46,6 @@ TarjanData::~TarjanData() {
 }
 
 
-
-
-void _dfs(TarjanData *argsPtr, int v, int parent);
-
 EdgeVector tarjan(Graph &graph) {
     TarjanData args(graph);
 
@@ -91,13 +88,35 @@ void _dfs(TarjanData *argsPtr, int v, int parent) {
 
 
 
+
 int main() {
-    Graph graph = Graph::createConectedGraph(10, 0.3);
+    // Graph graph = Graph::createConectedGraph(10, 0.3);
+    // std::cout << graph.toString();
+
+    std::ifstream file("ex1.txt");
+
+    if (!file) {
+        std::cerr << "Error opening file!" << std::endl;
+        return 1;
+    }
+
+    Graph graph = read_graph_from_file(file);
     std::cout << graph.toString();
+
+
+    // AdjGraph graph = create_random_graph(10, 0.3);
+    // std::cout << adjgraph_to_string(graph);
+
+    // TarjanData data(10);
+    // data.visited[0] = 1;
+    // data.tin[0] = 1;
+    // data.low[9] = 1;
+    // for (int i = 0; i < 30; i++) {
+    //     std::cout << data.visited[i];
+    // }
     
 
     EdgeVector bridges = tarjan(graph);
     std::cout << edgelist_to_string(bridges);
 
 }
-

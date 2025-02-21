@@ -10,44 +10,70 @@
 
 class Graph {
   private:
-    // Função recursiva de DFS para auxiliar na verificação de conectividade
+    /// @brief Recursive DFS auxiliar function to verify the graph connectivity.
     void DFSUtil(int v, std::vector<bool> &visited) const;
-    // Log da criação do grafo (imprime as arestas criadas)
+    
+    /// @brief custom random graph generator log behaviour
     static void createRandomGraphLog(const std::string& s);
   public:
-    int V;                            // Número de vértices
-    std::vector<std::list<int>> adj;  // Lista de adjacência
+    int V;                            // Vertex quantity
+    std::vector<std::list<int>> adj;  // Adjascent list
 
     Graph();
 
-    // Construtor que inicializa o grafo com V vértices
-    Graph(int vertices);
+    Graph(int V);
 
-    // Adiciona uma aresta não direcionada entre u e v
+    /// @brief Inserts an directed edge from u to v
+    void pushEdge(int u, int v);
+
+    /// @brief Inserts an undirected edge between u and v
     void addEdge(int u, int v);
 
-    // Remove a aresta não direcionada entre u e v
+    /// @brief removes an undirected edge between u and v
     void removeEdge(int u, int v);
 
-    // Verifica a existencia de uma aresta entre u e v
+    /// @brief Checks the existence of an undirected edge between u and v
     bool hasEdge(int u, int v);
 
-    // Imprime a estrutura do grafo
+    /**
+     * @brief Formats graph content to string text
+     *
+     * Every vertex is displayed on each line is increasing order
+     * 
+     * For each vertex I return:
+     * "Vertex I: a1, a2, ... , an" Where a represents a connection from vertex I 
+     * "Vertex I: (no connection)" When there are no connections from vertex I
+     * 
+     * @param graph The graph structure
+     * @return string containing display text
+     */
     std::string toString() const;
 
-    // Verifica se o grafo (ignorando vértices isolados) é conectado.
-    // Útil para o algoritmo de Fleury
+    /// @brief Verify if the graph is connected
     bool isConnected() const;
 
-    // Cria um grafo aleatório com n vértices
+
+     /**
+     * @brief Creates random graph
+     *
+     * For every possible edge for n vertices: 
+     *   If add_rate hits on a random number generator, include edge on both vertices
+     *   If it does not, ignore edge
+     * 
+     * @param n Number of vertices on graph
+     * @param add_rate Chance of creating a edge
+     * @return graph that contains all the generated edges
+     * 
+     * @warning add_rate will show undefined behaviour if its not in [0...1] range
+     */
     static Graph createRandomGraph(int n, float edgeProbability);
 
+    /// @brief Creates a random connected graph
     static Graph createConectedGraph(int n, float edgeProbability);
 
-    // Recupera a quantidade de vértices
+  
     int getVertexQuantity() const;
 
-    // Recupera a quantidade de arestas em determinado vértice
     int getEdgeQuantity(int v) const;
 };
 

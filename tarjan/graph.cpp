@@ -1,5 +1,18 @@
 #include "Graph.hpp"
 
+
+/**
+ * @brief Generates a random boolean value based on a given probability.
+ *
+ * This function returns `true` with a probability of `trueChance` and `false` otherwise.
+ * The probability value should be between `0.0f` and `1.0f`, inclusive.
+ *
+ * @param trueChance The probability (between 0.0 and 1.0) of returning `true`.
+ * @return `true` with a probability of `trueChance`, otherwise `false`.
+ *
+ * @note Uses `std::random_device` and `std::mt19937` for better randomness.
+ * @warning If `trueChance` is outside the range [0.0, 1.0], behavior is undefined.
+ */
 bool randomBoolean(float trueChance) {
   // Use random_device and mt19937 for a better random number generator
   std::random_device rd;
@@ -32,7 +45,7 @@ Graph::Graph() : V(0) {
   adj.resize(V);
 }
 
-Graph::Graph(int vertices) : V(vertices) {
+Graph::Graph(int v) : V(v) {
   adj.resize(V);
 }
 
@@ -44,6 +57,10 @@ bool Graph::hasEdge(int u, int v){
     }
   }
   return test;
+}
+
+void Graph::pushEdge(int u, int v) {
+  adj[u].push_back(v);
 }
 
 void Graph::addEdge(int u, int v) {
@@ -84,37 +101,6 @@ bool Graph::isConnected() const {
   }
   return true;
 }
-
-// Graph Graph::createRandomGraph(int n, float edgeProbability) { 
-//   Graph graph(n);
-//   std::ostringstream s;
-//   std::vector<int> perm(n);
-
-//   // Criar uma árvore aleatória para garantir conectividade inicial
-//   // std::iota(perm.begin(), perm.end(), 0);
-//   // std::shuffle(perm.begin(), perm.end(), std::mt19937(std::random_device()()));
-
-//   for (int i = 1; i < n; i++) {
-//       int parent = perm[std::rand() % i]; // Conecta a um vértice já inserido
-//       graph.addEdge(perm[i], parent);
-//       s << "{" << perm[i] << " " << parent << "}" << std::endl;
-//   }
-
-//   // Adicionar arestas extras probabilisticamente
-//   for (int i = 0; i < n; i++) {
-//       for (int j = i + 1; j < n; j++) {
-//           if (!graph.hasEdge(i, j) && randomBoolean(edgeProbability)) {
-//               graph.addEdge(i, j);
-//               s << "{" << i << " " << j << "}" << std::endl;
-//           }
-//       }
-//   }
-
-//   createRandomGraphLog(s.str());
-
-//   std::cout << "Grafo conexo" << std::endl; // O grafo sempre será conexo
-//   return graph;
-// }
 
 
 Graph Graph::createRandomGraph(int n, float edgeProbability) { 
