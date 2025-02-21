@@ -5,7 +5,7 @@
 #include <vector>
 #include <string>
 #include <string>
-
+#include "graph.cpp"
 
 typedef std::vector<std::vector<int>> AdjGraph;
 typedef std::vector<std::pair<int,int>> EdgeVector;
@@ -108,7 +108,7 @@ struct TarjanData {
         int *data;
     
     public: 
-        const AdjGraph *graph;
+        const Graph *graph;
         EdgeVector bridges;
 
         int time = 0;
@@ -124,7 +124,7 @@ struct TarjanData {
          * @param graph The graph on which Tarjan's algorithm will be applied.
          */
         
-        TarjanData(const AdjGraph &graph);
+        TarjanData(const Graph &graph);
         ~TarjanData();
 };
 

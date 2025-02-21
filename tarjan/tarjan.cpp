@@ -13,45 +13,7 @@
 #include <string>
 
 
-
-typedef std::vector<std::vector<int>> AdjGraph;
 typedef std::vector<std::pair<int,int>> EdgeVector;
-
-bool randomBoolean(float trueChance) {
-    // Use random_device and mt19937 for a better random number generator
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::uniform_real_distribution<float> dis(0.0f, 1.0f);
-
-    // Generate a random float between 0 and 1
-    float randVal = dis(gen);
-
-    // Return true if randVal is less than or equal to trueChance
-    return randVal <= trueChance;
-}
-
-
-std::string adjgraph_to_string(AdjGraph graph) {
-    
-    std::ostringstream s;
-
-    for (int i = 0; i < graph.size(); i++) {
-        s << "Vertex " << i << ": ";
-
-        if (graph[i].empty()) {  // Check if the list is empty
-            s << "(no connections)" << std::endl;
-            continue;
-        }
-
-        int end = graph[i].size()-1;
-        for (int j = 0; j < end; j++) {
-            s << graph[i][j] << ", ";
-        }
-        s << graph[i][end] << std::endl;
-    }
-
-    return s.str();
-}
 
 
 std::string edgelist_to_string(EdgeVector list) {
@@ -65,42 +27,8 @@ std::string edgelist_to_string(EdgeVector list) {
 }
 
 
-
-
-
-void create_random_graph_log(const std::string& s) {
-    std::cout << s;
-}
-
-AdjGraph create_random_graph(int n, float add_rate) { 
-    AdjGraph graph(n);
-
-    std::ostringstream s;
-    
-
-    // explore all edge combinations
-    for (int i = 0; i < n; i++) {
-        for (int j = i+1; j < n; j++) {
-            if (randomBoolean(add_rate)) {
-                graph[i].push_back(j);
-                graph[j].push_back(i);
-                
-                s << "{" << i << " " << j << "}" << std::endl;
-            }
-        }
-    }
-
-    create_random_graph_log(s.str());
-    
-    
-    return graph;
-}
-
-
-
-
-TarjanData::TarjanData(const AdjGraph& graph) {
-    int n = graph.size();
+TarjanData::TarjanData(const Graph& graph) {
+    int n = graph.getVertexQuantity();
     data = new int[n * 3];
     memset(data, 0, n * 3 * sizeof(int));
 
@@ -121,7 +49,7 @@ TarjanData::~TarjanData() {
 
 void _dfs(TarjanData *argsPtr, int v, int parent);
 
-EdgeVector tarjan(AdjGraph &graph) {
+EdgeVector tarjan(Graph &graph) {
     TarjanData args(graph);
 
     _dfs(&args, 0, 0);
@@ -137,7 +65,7 @@ void _dfs(TarjanData *argsPtr, int v, int parent) {
     args.visited[v] = true;
     args.tin[v] = args.low[v] = args.time++; 
 
-    for (int u : args.graph->at(v)) {
+    for (int u : args.graph->adj[v]) {
         if (u == parent) continue;
 
         if (args.visited[u]) {
@@ -164,16 +92,8 @@ void _dfs(TarjanData *argsPtr, int v, int parent) {
 
 
 int main() {
-    AdjGraph graph = create_random_graph(10, 0.3);
-    //std::cout << adjgraph_to_string(graph);
-
-    // TarjanData data(10);
-    // data.visited[0] = 1;
-    // data.tin[0] = 1;
-    // data.low[9] = 1;
-    // for (int i = 0; i < 30; i++) {
-    //     std::cout << data.visited[i];
-    // }
+    Graph graph = Graph::createConectedGraph(10, 0.3);
+    std::cout << graph.toString();
     
 
     EdgeVector bridges = tarjan(graph);
