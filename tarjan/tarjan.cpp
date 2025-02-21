@@ -1,3 +1,5 @@
+#include "tarjan.hpp"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
@@ -12,6 +14,8 @@
 
 
 
+typedef std::vector<std::vector<int>> AdjGraph;
+typedef std::vector<std::pair<int,int>> EdgeVector;
 
 bool randomBoolean(float trueChance) {
     // Use random_device and mt19937 for a better random number generator
@@ -26,11 +30,6 @@ bool randomBoolean(float trueChance) {
     return randVal <= trueChance;
 }
 
-
-
-
-typedef std::vector<std::vector<int>> AdjGraph;
-typedef std::vector<std::pair<int,int>> EdgeVector;
 
 std::string adjgraph_to_string(AdjGraph graph) {
     
@@ -54,6 +53,7 @@ std::string adjgraph_to_string(AdjGraph graph) {
     return s.str();
 }
 
+
 std::string edgelist_to_string(EdgeVector list) {
     std::ostringstream s;
 
@@ -66,11 +66,13 @@ std::string edgelist_to_string(EdgeVector list) {
 
 
 
+
+
 void create_random_graph_log(const std::string& s) {
     std::cout << s;
 }
 
-AdjGraph create_random_graph(int n) { 
+AdjGraph create_random_graph(int n, float add_rate) { 
     AdjGraph graph(n);
 
     std::ostringstream s;
@@ -79,7 +81,7 @@ AdjGraph create_random_graph(int n) {
     // explore all edge combinations
     for (int i = 0; i < n; i++) {
         for (int j = i+1; j < n; j++) {
-            if (randomBoolean(0.3)) {
+            if (randomBoolean(add_rate)) {
                 graph[i].push_back(j);
                 graph[j].push_back(i);
                 
@@ -97,38 +99,23 @@ AdjGraph create_random_graph(int n) {
 
 
 
-typedef std::vector<std::vector<int>> AdjGraph;
-typedef std::vector<std::pair<int,int>> EdgeVector;
+TarjanData::TarjanData(const AdjGraph& graph) {
+    int n = graph.size();
+    data = new int[n * 3];
+    memset(data, 0, n * 3 * sizeof(int));
 
-struct TarjanData {
-    private: 
-        int *data;
-    
-    public: 
-        const AdjGraph *graph;
-        EdgeVector bridges;
+    visited = data;
+    tin = visited + n;
+    low = tin + n;
 
-        int time = 0;
-        int *visited, *tin, *low;
+    this->graph = &graph;
+    bridges = EdgeVector();
+}
 
+TarjanData::~TarjanData() {
+    delete[] data;
+}
 
-        TarjanData(const AdjGraph &graph) {
-            int n = graph.size();
-            data = new int[n * 3];
-            memset(data, 0, n * 3 * sizeof(int));
-
-            visited = data;
-            tin = visited + n;
-            low = tin + n;
-
-            this->graph = &graph;
-            bridges = EdgeVector();
-        }
-
-        ~TarjanData() {
-            delete[] data;
-        }
-};
 
 
 
@@ -177,7 +164,7 @@ void _dfs(TarjanData *argsPtr, int v, int parent) {
 
 
 int main() {
-    AdjGraph graph = create_random_graph(10);
+    AdjGraph graph = create_random_graph(10, 0.3);
     //std::cout << adjgraph_to_string(graph);
 
     // TarjanData data(10);
