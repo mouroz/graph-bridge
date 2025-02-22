@@ -2,7 +2,6 @@
 #define GRAPH_READER_H
 
 #include "tarjan.hpp" // Graph structures
-#include "graph_reader.hpp"
 #include "graph.hpp"
 
 #include <stdio.h>
