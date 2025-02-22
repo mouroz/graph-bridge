@@ -89,7 +89,7 @@ void _dfs(TarjanData *argsPtr, int v, int parent) {
 
 
 
-int main() {
+/*int main() {
     // Graph graph = Graph::createConectedGraph(10, 0.3);
     // std::cout << graph.toString();
 
@@ -119,4 +119,4 @@ int main() {
     EdgeVector bridges = tarjan(graph);
     std::cout << edgelist_to_string(bridges);
 
-}
+}*/

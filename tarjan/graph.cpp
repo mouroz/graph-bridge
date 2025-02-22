@@ -1,5 +1,4 @@
-#include "Graph.hpp"
-
+#include "graph.hpp"
 
 /**
  * @brief Generates a random boolean value based on a given probability.
