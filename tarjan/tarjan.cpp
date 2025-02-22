@@ -1,5 +1,6 @@
 #include "tarjan.hpp"
-#include "graph_reader.cpp"
+#include "graph_reader.hpp"
+#include "graph.hpp"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -20,7 +21,7 @@ typedef std::vector<std::pair<int,int>> EdgeVector;
 std::string edgelist_to_string(EdgeVector list) {
     std::ostringstream s;
 
-    for (int i = 0; i < list.size(); i++) {
+    for (size_t i = 0; i < list.size(); i++) {
         s << "{" << list[i].first << ", "  << list[i].second << "}" << std::endl;
     }
 
@@ -46,7 +47,7 @@ TarjanData::~TarjanData() {
 }
 
 
-EdgeVector tarjan(Graph &graph) {
+EdgeVector tarjan(const Graph &graph) {
     TarjanData args(graph);
 
     _dfs(&args, 0, 0);

@@ -4,8 +4,7 @@
 #include <utility>
 #include <vector>
 #include <string>
-#include <string>
-#include "graph.cpp"
+#include "graph.hpp"
 
 typedef std::vector<std::vector<int>> AdjGraph;
 typedef std::vector<std::pair<int,int>> EdgeVector;
@@ -106,7 +105,7 @@ void _dfs(TarjanData *argsPtr, int v, int parent);
  * 
  * @warning The graph must have vertexes identified as integer numbers on range [0 ... n-1]
  */
-EdgeVector tarjan(const AdjGraph &graph);
+EdgeVector tarjan(const Graph &graph);
 
 
 #endif
