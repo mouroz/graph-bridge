@@ -1,19 +1,29 @@
 #include "eulerian.hpp"
 
 /*
-@brief this method runs the graph and returns if there's a possibility of existence of an eulerian path
-
+@brief this method checks if there's a possibility of existence of an eulerian path in the graph
 @params graph the graph to be analyzed
-@return true if there's a possibility of existence of an eulerian path, false otherwise
+@return pair of (bool, int) where bool indicates if Eulerian path exists, and int is the starting vertex (or -1 if no path)
 */
-bool canHaveEulerianPath(Graph graph) {
+pair<bool, int> canHaveEulerianPath(Graph graph) {
   int odd = 0;
+  int start = -1;
   for (int i = 0; i < graph.getVertexQuantity(); i++) {
     if (graph.adj[i].size() % 2 != 0) {
       odd++;
+      if (start == -1) {
+        start = i;
+      }
     }
   }
-  return odd == 0 || odd == 2;
+  if (odd == 0) {
+    // Eulerian circuit, can start anywhere
+    return {true, 0};
+  } else if (odd == 2) {
+    // Eulerian path, must start at one of the odd vertices
+    return {true, start};
+  }
+  return {false, -1};
 }
 
 
@@ -42,22 +52,17 @@ bool isEdgeBridge(int u, int v, const EdgeVector &bridges) {
 */
 vector<int> findEulerianPath(Graph &graph) {
   vector<int> path;
-  if (!canHaveEulerianPath(graph)) {
+  pair<bool, int> result = canHaveEulerianPath(graph);
+  bool hasPath = result.first;
+  int startVertex = result.second;
+  
+  if (!hasPath) {
     return path; // Return empty path if no Eulerian path exists
   }
 
-  // Find a starting vertex (vertex with odd degree if exists)
-  int start = 0;
-  int i = 0;
-  while (i < graph.getVertexQuantity() && start == 0) {
-    if (graph.adj[i].size() % 2 != 0) {
-      start = i;
-    }
-    i++;
-  }
 
   stack<int> stack;
-  stack.push(start);
+  stack.push(startVertex);
 
   while (!stack.empty()) {
     int u = stack.top();
@@ -99,7 +104,8 @@ int main(void) {
   cout << "Graph structure:" << endl;
   cout << graph.toString() << endl;
 
-  cout << "Can have Eulerian path: " << (canHaveEulerianPath(graph) ? "Yes" : "No") << endl;
+  pair<bool, int> result = canHaveEulerianPath(graph);
+  cout << "Can have Eulerian path: " << (result.first ? "Yes" : "No") << endl;
 
   cout << "Bridges in the graph:" << endl;
   EdgeVector bridges = tarjan(graph);

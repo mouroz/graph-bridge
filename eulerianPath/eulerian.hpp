@@ -12,7 +12,7 @@ using namespace std;
 /*
 @brief this method runs the graph and returns if there's a possibility of existence of an eulerian path
 */
-bool canHaveEulerianPath(Graph graph);
+pair<bool, int> canHaveEulerianPath(Graph graph);
 
 /*
 @brief Finds an Eulerian path in the graph using Fleury's algorithm
