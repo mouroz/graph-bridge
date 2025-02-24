@@ -88,16 +88,32 @@ std::string Graph::toString() const {
 }
 
 bool Graph::isConnected() const {
-  // Encontra um vértice com ao menos uma aresta para iniciar a DFS
   int start = 0;
 
   std::vector<bool> visited(V, false);
-  DFSUtil(start, visited);
+  
+  // DFS iterativa para evitar estouro de pilha (stack overflow)
+  std::stack<int> stack;
+  stack.push(start);
+  visited[start] = true;
 
-  for (int i = 0; i < V; ++i) {
-    if (!visited[i])
-      return false;
+  while (!stack.empty()) {
+      int u = stack.top();
+      stack.pop();
+
+      for (int v : adj[u]) {
+          if (!visited[v]) {
+              visited[v] = true;
+              stack.push(v);
+          }
+      }
   }
+
+  // Verificar se todos os vértices foram visitados
+  for (int i = 0; i < V; ++i) {
+      if (!visited[i]) return false;
+  }
+  
   return true;
 }
 
@@ -143,12 +159,10 @@ Graph Graph::createRandomGraph(int n, float edgeProbability) {
 Graph Graph::createConectedGraph(int n, float edgeProbability) {
   Graph graph(n);
 
-  // Passo 1: Criar uma espinha dorsal conectando todos os vértices em uma cadeia
   for (int i = 1; i < n; i++) {
-      graph.addEdge(i - 1, i); // Conecta cada vértice ao próximo
+      graph.addEdge(i - 1, i); 
   }
 
-  // Passo 2: Adicionar arestas aleatórias com base na probabilidade
   std::random_device rd;
   std::mt19937 gen(rd());
   std::uniform_real_distribution<float> dis(0.0f, 1.0f);
