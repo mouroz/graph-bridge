@@ -92,34 +92,3 @@ vector<int> findEulerianPath(Graph &graph) {
 
   return path;
 }
-
-int main(void) {
-  ifstream file("eulerianPath/test_graph.txt");
-  if (!file) {
-    cerr << "Error opening eulerianPath/test_graph.txt!" << endl;
-    return 1;
-  }
-
-  Graph graph = read_graph_from_file(file);
-  cout << "Graph structure:" << endl;
-  cout << graph.toString() << endl;
-
-  pair<bool, int> result = canHaveEulerianPath(graph);
-  cout << "Can have Eulerian path: " << (result.first ? "Yes" : "No") << endl;
-
-  cout << "Bridges in the graph:" << endl;
-  EdgeVector bridges = tarjan(graph);
-  cout << edgelist_to_string(bridges) << endl;
-
-  cout << "Eulerian path:" << endl;
-  vector<int> path = findEulerianPath(graph);
-  for (size_t i = 0; i < path.size(); i++) {
-    cout << path[i];
-    if (i < path.size() - 1) {
-      cout << " -> ";
-    }
-  }
-  cout << endl;
-
-  return 0;
-}

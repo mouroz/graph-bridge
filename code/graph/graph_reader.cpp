@@ -1,20 +1,12 @@
 
 #include "graph_reader.hpp"
+#include "response_struct.hpp"
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
 #include <vector>
 
-template <typename T>
-bool Response<T>::is_ok() {
-    return status == 0;
-}
-
-template <typename T>
-void Response<T>::set_not_ok() {
-    status = -1;
-}
 
 
 Response<int> read_number(std::string &s) {
@@ -38,12 +30,12 @@ Response<std::vector<int>> read_numbers(std::string line) {
     Response<std::vector<int>> response;
 
 
-    for (char ch : line) {
-        if (!(isdigit(ch) || ch == ' ' || ch == '-' || ch == '+')) {
-            response.set_not_ok(); 
-            return response;
-        }
-    }
+    // for (char ch : line) {
+    //     if (!(isdigit(ch) || ch == ' ' || ch == '-' || ch == '+')) {
+    //         response.set_not_ok(); 
+    //         return response;
+    //     }
+    // }
 
     // Loop extracting next inner string
     while (iss >> temp) {

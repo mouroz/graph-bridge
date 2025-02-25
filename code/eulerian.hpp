@@ -3,9 +3,9 @@
 
 #include <iostream>
 #include <stack>
-#include "../tarjan/tarjan.hpp"
-#include "../tarjan/graph_reader.hpp"
-#include "../tarjan/graph.hpp"
+#include "tarjan.hpp"
+#include "graph_reader.hpp"
+#include "graph.hpp"
 
 using namespace std;
 

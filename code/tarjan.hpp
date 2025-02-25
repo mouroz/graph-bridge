@@ -9,22 +9,7 @@
 typedef std::vector<std::vector<int>> AdjGraph;
 typedef std::vector<std::pair<int,int>> EdgeVector;
 
-/**
- * @brief Formats EdgeList content to string text
- *
- * Every edge from 0...n-1 is displayed on each line is stored order
- * 
- * For each edge I return:
- * "{u, v}" where u is first and v is second element on the pair of vertices
- * 
- * @param list The EdgeList structure
- * @return string containing display text
- */
-std::string edgelist_to_string(EdgeVector list);
 
-
-
-#include <vector>
 
 /**
  * @brief Holds data used by Tarjan's algorithm to find bridges in a graph.

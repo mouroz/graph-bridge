@@ -5,7 +5,6 @@
 #include <iostream>
 #include <chrono>
 
-using namespace std;
 
 /**
  * @brief Checks if the edge (u, v) is a bridge in the given graph.
@@ -37,10 +36,10 @@ bool isBridge(int u, int v, Graph &g)
  * @param g The graph object to check for bridges.
  * @return A vector of pairs representing the bridges found in the graph.
  */
-vector<pair<int, int>> executeNaive(Graph &g)
+EdgeVector executeNaive(Graph &g)
 {
-    vector<pair<int, int>> bridges; // Vector to store the bridges found in the graph
-    vector<pair<int, int>> edges;   // Vector to store all edges before removing any
+    EdgeVector bridges; // Vector to store the bridges found in the graph
+    EdgeVector edges;   // Vector to store all edges before removing any
 
     // Collect all edges from the graph
     for (int u = 0; u < g.V; u++) { 
@@ -62,27 +61,3 @@ vector<pair<int, int>> executeNaive(Graph &g)
 }
 
 
-int main(void)
-{
-  Graph graph = Graph::createConectedGraph(100000, 0.0001);
-  graph.show();
-
-  vector<pair<int, int>> bridges; 
-
-  // calculating naive execution time
-  chrono::steady_clock::time_point begin = chrono::steady_clock::now();
-  bridges = executeNaive(graph);
-  chrono::steady_clock::time_point end = chrono::steady_clock::now();
-
-  if(!bridges.empty()){
-    cout << "Bridges found:\n";
-    for (auto bridge : bridges)
-    {
-      cout << "{ " << bridge.first << "-" << bridge.second << " }" << endl;
-    }
-  } else {
-    cout << "Bridges not found!\n";
-  }
-
-  cout << "Naive execution time for " << graph.V << " vertices = " << chrono::duration_cast<chrono::milliseconds> (end - begin).count() << "[ms]" << endl;
-}

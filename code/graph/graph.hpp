@@ -8,13 +8,29 @@
 #include <sstream>
 #include <random>
 
+typedef std::vector<std::pair<int,int>> EdgeVector;
+/**
+ * @brief Formats EdgeList content to string text
+ *
+ * Every edge from 0...n-1 is displayed on each line is stored order
+ * 
+ * For each edge I return:
+ * "{u, v}" where u is first and v is second element on the pair of vertices
+ * 
+ * @param list The EdgeList structure
+ * @return string containing display text
+ */
+std::string edgelist_to_string(EdgeVector list);
+
+
+
+
 class Graph {
   private:
-    /// @brief Recursive DFS auxiliar function to verify the graph connectivity.
-    void DFSUtil(int v, std::vector<bool> &visited) const;
-    
     /// @brief custom random graph generator log behaviour
     static void createRandomGraphLog(const std::string& s);
+
+
   public:
     int V;                            // Vertex quantity
     std::vector<std::list<int>> adj;  // Adjascent list
@@ -48,6 +64,7 @@ class Graph {
      * @return string containing display text
      */
     std::string toString() const;
+    std::string toStringBrief() const;
 
     /// @brief Verify if the graph is connected
     bool isConnected() const;
@@ -71,13 +88,20 @@ class Graph {
     /// @brief Creates a random connected graph
     static Graph createConectedGraph(int n, float edgeProbability);
 
-  
+
     int getVertexQuantity() const;
 
     int getEdgeQuantity(int v) const;
 
-    /// @brief show out a graph
+    /// @warning Safety checks not implemented!
+    void writeToFile(std::ofstream& outFile) const;
+
+    //static Graph read_graph_from_file();
+
     void show();
 };
+
+
+
 
 #endif  // GRAPH_HPP
