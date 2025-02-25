@@ -4,6 +4,8 @@
 #include <sstream>
 #include <random>
 
+// Global random generator, seeded once
+std::mt19937 gen(std::random_device{}());
 
 /**
  * @brief Generates a random boolean value based on a given probability.
@@ -19,9 +21,7 @@
  */
 bool randomBoolean(float trueChance) {
   // Use random_device and mt19937 for a better random number generator
-  std::random_device rd;
-  std::mt19937 gen(rd());
-  std::uniform_real_distribution<float> dis(0.0f, 1.0f);
+  static std::uniform_real_distribution<float> dis(0.0f, 1.0f);
 
   // Generate a random float between 0 and 1
   float randVal = dis(gen);

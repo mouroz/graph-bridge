@@ -130,7 +130,7 @@ Graph Graph::createConectedGraph(int n, float edgeProbability) {
 
 
   for (int i = 0; i < n; i++) {
-      for (int j = i + 1; j < n; j++) {
+      for (int j = i + 2; j < n; j++) {
           if (randomBoolean(edgeProbability)) {
               graph.addEdge(i, j);
           }
