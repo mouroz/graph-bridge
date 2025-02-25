@@ -5,6 +5,14 @@ project(MyProject)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
+# Set output directory for the executable
+if(WIN32)
+    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR})
+elseif(UNIX)
+    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR})
+endif()
+
+
 # Add include directories (so we don't need relative paths in #include)
 include_directories(${CMAKE_SOURCE_DIR}/code/utils ${CMAKE_SOURCE_DIR}/code/graph)
 
@@ -25,5 +33,9 @@ set(SOURCES
 # Create the executable
 add_executable(MyProject ${SOURCES})
 
-# (Optional) Enable warnings
-target_compile_options(MyProject PRIVATE -Wall -Wextra -Wpedantic)
+# Set compiler flags for Linux and Windows
+if(UNIX)
+    target_compile_options(MyProject PRIVATE -Wall -Wextra -Wpedantic)
+elseif(WIN32)
+    target_compile_options(MyProject PRIVATE /W4)
+endif()

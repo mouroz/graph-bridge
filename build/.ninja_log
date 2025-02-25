@@ -1,0 +1,9 @@
+# ninja log v5
+1	727	1740504647891191523	CMakeFiles/MyProject.dir/code/utils/randomizer.cpp.o	561775850279b0a6
+0	792	1740504647955184062	CMakeFiles/MyProject.dir/code/naive.cpp.o	3439146f3a673327
+1	840	1740504648003178470	CMakeFiles/MyProject.dir/code/graph/graph_reader.cpp.o	ec0b3390c7b4e0ff
+0	851	1740504648014177205	CMakeFiles/MyProject.dir/code/tarjan.cpp.o	96bd464604596b47
+0	939	1740504648102167081	CMakeFiles/MyProject.dir/code/main.cpp.o	9a17708e4081f445
+1	940	1740504648103166966	CMakeFiles/MyProject.dir/code/eulerian.cpp.o	5d40d2e12b63602e
+1	968	1740504648130163860	CMakeFiles/MyProject.dir/code/graph/graph.cpp.o	90dee431c04a2d28
+968	1054	1740504648217153853	../code/MyProject	439537953f1480d9
