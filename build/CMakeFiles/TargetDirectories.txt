@@ -1,3 +1,0 @@
-/home/gabriel/code/PAA/graph-bridge/build/CMakeFiles/MyProject.dir
-/home/gabriel/code/PAA/graph-bridge/build/CMakeFiles/edit_cache.dir
-/home/gabriel/code/PAA/graph-bridge/build/CMakeFiles/rebuild_cache.dir

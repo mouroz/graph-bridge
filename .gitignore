@@ -30,3 +30,24 @@
 *.exe
 *.out
 *.app
+
+# Any build and buildXXX folder 
+build*/
+CMakeFiles
+
+# The compiled executables
+MyProject
+MyProject.exe
+
+# Ignore CMake build directories
+/build*/
+/CMakeCache.txt
+/CMakeFiles/
+/cmake_install.cmake
+/Makefile
+
+
+# Ninja build files (if using Ninja generator)
+*.ninja
+.ninja_deps
+.ninja_log

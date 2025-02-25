@@ -1,1 +1,0 @@
-/usr/bin/c++ CMakeFiles/MyProject.dir/code/main.cpp.o CMakeFiles/MyProject.dir/code/tarjan.cpp.o CMakeFiles/MyProject.dir/code/naive.cpp.o CMakeFiles/MyProject.dir/code/eulerian.cpp.o CMakeFiles/MyProject.dir/code/graph/graph.cpp.o CMakeFiles/MyProject.dir/code/graph/graph_reader.cpp.o CMakeFiles/MyProject.dir/code/utils/randomizer.cpp.o -o code/MyProject 
