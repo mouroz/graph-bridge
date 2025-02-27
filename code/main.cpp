@@ -62,7 +62,7 @@ int testNaive() {
 }
 
 int testTarjan() {
-    Graph graph = Graph::createConectedGraph(100000, 0.0001);
+    Graph graph = Graph::createConectedGraph(5, 1);
     graph.show();
 
     EdgeVector bridges; 

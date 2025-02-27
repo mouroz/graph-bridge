@@ -100,26 +100,13 @@ void _dfs(TarjanData *argsPtr, int start) {
         
         if (!wasVisited(v, &args)) {
             args.tin[v] = args.low[v] = args.time++;
-            int edgeQtde = 0;
-            int conflicts = 0;
             for (int u : args.graph->adj[v]) {
-                edgeQtde++;
                 if (u == parent){ 
-                    conflicts++;
                     continue;
                 } else if (wasVisited(u, &args)) {
-                    conflicts++;
                     args.low[v] = std::min(args.low[v], args.tin[u]);
                 } else {
                     stack.push({u, v});
-                }
-            }
-            
-            if(conflicts == edgeQtde){
-                stack.pop();    
-                args.low[parent] = std::min(args.low[v], args.low[parent]);
-                if (args.low[v] > args.tin[parent]) {
-                    argsPtr->bridges.push_back({parent, v});
                 }
             }
         } else {
