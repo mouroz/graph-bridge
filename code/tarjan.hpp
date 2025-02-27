@@ -46,8 +46,8 @@ struct TarjanData {
         EdgeVector bridges;
 
         int time = 0;
-        int *visited, *tin, *low;
-
+        // int *visited, *tin, *low;
+        int *tin, *low;
 
         /**
          * @brief Constructs a TarjanData object for the provided graph.
@@ -77,8 +77,10 @@ struct TarjanData {
  * @param v Current vertex
  * @param parent Vertex that initiated this recursion on its "child". First vertex receives parent as itself
  */
-void _dfs(TarjanData *argsPtr, int v, int parent);
+// void _dfs(TarjanData *argsPtr, int v, int parent);
 
+
+void _dfs(TarjanData *argsPtr, int start);
 
 /**
  * @brief Performs execution of tarjan algorithm and return list of bridges
@@ -91,6 +93,9 @@ void _dfs(TarjanData *argsPtr, int v, int parent);
  * @warning The graph must have vertexes identified as integer numbers on range [0 ... n-1]
  */
 EdgeVector tarjan(const Graph &graph);
+
+
+bool wasVisited(int vertex, TarjanData* graph);
 
 
 #endif

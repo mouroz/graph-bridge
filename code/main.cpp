@@ -42,6 +42,7 @@ int testNaive() {
     // calculating naive execution time
     std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
     bridges = executeNaive(graph);
+
     std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
 
     if(!bridges.empty()){
@@ -55,6 +56,34 @@ int testNaive() {
     }
 
     std::cout << "Naive execution time for " << graph.V << " vertices = " 
+    << std::chrono::duration_cast<std::chrono::milliseconds> (end - begin).count() << "[ms]" << std::endl;
+
+    return 0;
+}
+
+int testTarjan() {
+    Graph graph = Graph::createConectedGraph(100000, 0.0001);
+    graph.show();
+
+    EdgeVector bridges; 
+
+    // calculating naive execution time
+    std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
+    bridges = tarjan(graph);
+
+    std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+
+    if(!bridges.empty()){
+    std::cout << "Bridges found:\n";
+    for (auto bridge : bridges)
+    {
+        std::cout << "{ " << bridge.first << "-" << bridge.second << " }" << std::endl;
+    }
+    } else {
+    std::cout << "Bridges not found!\n";
+    }
+
+    std::cout << "Tarjan execution time for " << graph.V << " vertices = " 
     << std::chrono::duration_cast<std::chrono::milliseconds> (end - begin).count() << "[ms]" << std::endl;
 
     return 0;
@@ -93,7 +122,8 @@ int testEulerian() {
 
 int main() {
     //return ioTest();
-    return testNaive();
+    // return testNaive();
+    return testTarjan();
 }
 
 
