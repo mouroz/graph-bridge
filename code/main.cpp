@@ -8,26 +8,63 @@
 #include <iostream>
 #include <chrono>
 #include <string>
-
+#include <filesystem>
 
 
 using namespace std;
 
 void outputGraph(const Graph& graph, const std::string& str);
 
+
+
+long getDuration(std::chrono::steady_clock::time_point begin, std::chrono::steady_clock::time_point end) {
+    return std::chrono::duration_cast<std::chrono::milliseconds> (end - begin).count();
+}
+
+
 int ioTest() {
+    const string filename = "examples/out1.txt";
+    std::chrono::steady_clock::time_point begin, end; 
 
-    std::ifstream file("examples/out1.txt");
+    // Random generator
+    begin = std::chrono::steady_clock::now();
+    Graph graph = Graph::createConectedGraph(100000, 0.001);
+    end = std::chrono::steady_clock::now();
 
-    if (!file) {
-        std::cerr << "Error opening file!" << std::endl;
-        return 1;
+    std::cout << "generation time: " << getDuration(begin,end) << "[ms]" << std::endl;
+    
+    
+    // Graph Writer
+    std::filesystem::create_directory("examples");
+   
+    size_t bufferSize = 64 * 1024;  // 64KB
+    std::vector<char> ioBuffer(bufferSize);
+
+    TimedResponse<void> writeResult = graphformat::writeGraph(filename, ioBuffer, graph);
+    if (!writeResult.isOk()) {
+        std::cerr << writeResult.error << std::endl;
+        return -1;
+    } 
+    std::cout << "write time: " << writeResult.duration << "[ms]" << std::endl;
+    ioBuffer.clear();
+    
+    TimedResponse<Graph> result = graphformat::readGraph(filename, ioBuffer);
+    if (!result.isOk()) {
+        std::cerr << writeResult.error << std::endl;
+        return -1;
     }
+    std::cout << "read time: " << result.duration << "[ms]" << std::endl;
+    ioBuffer.clear();
 
-    Graph graph = read_graph_from_file(file);
-    graph.show();
 
-    outputGraph(graph, "examples/out1.txt");
+    // Check results
+    begin = std::chrono::steady_clock::now();
+    
+    if (graph.isEqual(result.value)) std::cout << "WRITE/READ SUCCESFULL AND MATCHES" << std::endl;
+    else std::cout << "WRITE/READ DOES NOT MATCH GENERATED GRAPH" << std::endl;
+    
+    end = std::chrono::steady_clock::now();
+    std::cout << "comparison time: " << getDuration(begin,end) << "[ms]" << std::endl;;
     
     return 0;
 }
@@ -96,7 +133,7 @@ int testEulerian() {
     return 1;
     }
 
-    Graph graph = read_graph_from_file(file);
+    Graph graph = graphtext::read_graph_from_file(file);
     cout << "Graph structure:" << endl;
     cout << graph.toString() << endl;
 
@@ -121,20 +158,15 @@ int testEulerian() {
 }
 
 int main() {
-    //return ioTest();
+    // Graph Writer
+
+    
+    
+    return ioTest();
     // return testNaive();
-    return testTarjan();
+    //return testTarjan();
 }
 
 
 
-void outputGraph(const Graph& graph, const std::string& str) {
-    std::ofstream file(str);
-    
-    
-    if (!file) {
-        std::cerr << "Error creating / getting access to output file!" << std::endl;
-    }
 
-    graph.writeToFile(file);
-}

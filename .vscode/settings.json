@@ -71,7 +71,8 @@
     "xmemory": "cpp",
     "xstring": "cpp",
     "xtr1common": "cpp",
-    "xutility": "cpp"
+    "xutility": "cpp",
+    "codecvt": "cpp"
   },
   "cmake.sourceDirectory": "E:/facul/CC_Puc/graph-bridge"
 }

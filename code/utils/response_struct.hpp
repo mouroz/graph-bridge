@@ -15,13 +15,45 @@
 template <typename T>
 struct Response {
     int status = 0; //default value is ok
-    T val;
+    T value;
 
-    bool is_ok() { return status == 0; }
+    bool isOk() { return status == 0; }
 
     // Standart "not ok" value without any meaning
-    void set_not_ok() { status = -1; }
+    void setNotOk() { status = -1; }
   
+};
+
+
+template <typename T>
+struct TimedResponse {
+    std::string error = "";
+    long duration = 0;
+    T value;
+
+
+    bool isOk() { return error == ""; }
+    void setError(const std::string& error) { this.error = error; }
+    void setDuration(long duration) { this->duration = duration; }
+    
+    T getValue() {return value;}
+    std::string getError() {return error;}
+    long getDuration() {return duration;}
+};
+
+template <>
+struct TimedResponse<void> {
+    std::string error = "";
+    long duration = 0;
+
+    bool isOk() { return error == ""; }
+    void setError(const std::string& error) { this->error = error; }
+    void setDuration(long duration) { this->duration = duration; }
+
+    // No value member for void
+    void getValue() { /* No value in this case */ }
+    std::string getError() { return error; }
+    long getDuration() { return duration; }
 };
 
 #endif

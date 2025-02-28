@@ -185,25 +185,16 @@ void Graph::show() {
   std::cout << toStringBrief();
 }
 
-
-
-
-/// @section Graph format
-void Graph::writeToFile(std::ofstream& outFile) const{
+bool Graph::isEqual(const Graph& graph) {
+  if(adj.size() != graph.adj.size()) return false;
   
-  // Write number of vertices
-  outFile << adj.size() << "\n";
-
-  // Write adjacency list
-  for (size_t i = 0; i < adj.size(); ++i) {
-      for (int neighbor : adj[i]) {
-          outFile << neighbor << " ";
-      }
-      outFile << "\n";
-  }
-
-  outFile.close();
+  return std::equal(adj.begin(), adj.end(), graph.adj.begin());
+  
 }
+
+
+
+
 
 
 

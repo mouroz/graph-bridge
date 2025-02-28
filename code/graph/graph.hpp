@@ -65,6 +65,7 @@ class Graph {
      */
     std::string toString() const;
     std::string toStringBrief() const;
+    
 
     /// @brief Verify if the graph is connected
     bool isConnected() const;
@@ -93,12 +94,11 @@ class Graph {
 
     int getEdgeQuantity(int v) const;
 
-    /// @warning Safety checks not implemented!
-    void writeToFile(std::ofstream& outFile) const;
-
     //static Graph read_graph_from_file();
 
     void show();
+
+    bool isEqual(const Graph& graph);
 };
 
 
