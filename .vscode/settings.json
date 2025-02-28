@@ -72,7 +72,9 @@
     "xstring": "cpp",
     "xtr1common": "cpp",
     "xutility": "cpp",
-    "codecvt": "cpp"
+    "codecvt": "cpp",
+    "variant": "cpp",
+    "unordered_set": "cpp"
   },
   "cmake.sourceDirectory": "E:/facul/CC_Puc/graph-bridge"
 }

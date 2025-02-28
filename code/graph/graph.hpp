@@ -70,26 +70,6 @@ class Graph {
     /// @brief Verify if the graph is connected
     bool isConnected() const;
 
-
-     /**
-     * @brief Creates random graph
-     *
-     * For every possible edge for n vertices: 
-     *   If add_rate hits on a random number generator, include edge on both vertices
-     *   If it does not, ignore edge
-     * 
-     * @param n Number of vertices on graph
-     * @param add_rate Chance of creating a edge
-     * @return graph that contains all the generated edges
-     * 
-     * @warning add_rate will show undefined behaviour if its not in [0...1] range
-     */
-    static Graph createRandomGraph(int n, float edgeProbability);
-
-    /// @brief Creates a random connected graph
-    static Graph createConectedGraph(int n, float edgeProbability);
-
-
     int getVertexQuantity() const;
 
     int getEdgeQuantity(int v) const;

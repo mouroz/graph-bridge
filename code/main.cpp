@@ -3,6 +3,7 @@
 #include "tarjan.hpp"
 #include "naive.hpp"
 #include "eulerian.hpp"
+#include "randomizer.hpp"
 
 #include <vector>
 #include <iostream>
@@ -28,7 +29,7 @@ int ioTest() {
 
     // Random generator
     begin = std::chrono::steady_clock::now();
-    Graph graph = Graph::createConectedGraph(100000, 0.001);
+    Graph graph = randomgraph::createConectedGraph(100000, 0.001f);
     end = std::chrono::steady_clock::now();
 
     std::cout << "generation time: " << getDuration(begin,end) << "[ms]" << std::endl;
@@ -71,7 +72,7 @@ int ioTest() {
 
 
 int testNaive() {
-    Graph graph = Graph::createConectedGraph(1000, 0.0001);
+    Graph graph = randomgraph::createConectedGraph(100000, 0.001f);
     graph.show();
 
     EdgeVector bridges; 
@@ -99,7 +100,7 @@ int testNaive() {
 }
 
 int testTarjan() {
-    Graph graph = Graph::createConectedGraph(5, 1);
+    Graph graph = randomgraph::createConectedGraph(100000, 0.001f);
     graph.show();
 
     EdgeVector bridges; 
@@ -157,12 +158,20 @@ int testEulerian() {
     return 0;
 }
 
+int randomGenTest() {
+    Graph graph = randomgraph::createEulerianGraph(6, 10);
+    
+    graph.show();
+
+    return 0;
+}
+
 int main() {
     // Graph Writer
 
     
-    
-    return ioTest();
+    return randomGenTest();
+    //return ioTest();
     // return testNaive();
     //return testTarjan();
 }

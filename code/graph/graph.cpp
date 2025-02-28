@@ -99,46 +99,6 @@ bool Graph::isConnected() const {
 }
 
 
-Graph Graph::createRandomGraph(int n, float edgeProbability) { 
-  Graph graph(n);
-
-  std::ostringstream s;
-  
-  for (int i = 0; i < n; i++) {
-      for (int j = i+1; j < n; j++) {
-          if (randomBoolean(edgeProbability)) {
-              graph.addEdge(i, j);
-              s << "{" << i << " " << j << "}" << std::endl;
-          }
-      }
-  }
-
-  createRandomGraphLog(s.str());
-
-  
-  return graph;
-}
-
-
-Graph Graph::createConectedGraph(int n, float edgeProbability) {
-  Graph graph(n);
-
-  // Add minimum requirement
-  for (int i = 1; i < n; i++) {
-      graph.addEdge(i - 1, i); 
-  }
-
-
-  for (int i = 0; i < n; i++) {
-      for (int j = i + 2; j < n; j++) {
-          if (randomBoolean(edgeProbability)) {
-              graph.addEdge(i, j);
-          }
-      }
-  }
-
-  return graph;
-}
 
 
 int Graph::getEdgeQuantity(int v) const{
