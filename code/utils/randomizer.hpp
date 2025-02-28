@@ -2,6 +2,7 @@
 #define RANDOMIZER_H
 
 #include "graph.hpp"
+#include "response_struct.hpp"
 
 #include <algorithm>
 #include <sstream>
@@ -13,6 +14,9 @@
 
 
 namespace randomgraph {
+    const int EDGELIMIT = 10485760;
+    const long BYTE_TO_MB = 1048576;
+    
     struct pair_hash {
         template <class T1, class T2>
         std::size_t operator ( ) (const std::pair<T1, T2>& p) const {
@@ -43,11 +47,11 @@ namespace randomgraph {
 
     int __connectEmptyGraph(Graph& graph, std::unordered_set<std::pair<int, int>, pair_hash>& addedEdges);
 
-    Graph createConectedGraph(int n, int edges);
-    Graph createConectedGraph(int n, float edgePercentage); 
+    Response<Graph> createConectedGraph(int n, int edges);
+    Response<Graph> createConectedGraph(int n, float edgePercentage); 
 
-    Graph createEulerianGraph(int n, int edges);
-    Graph createEulerianGraph(int n, float edgePercentage);
+    Response<Graph> createEulerianGraph(int n, int edges);
+    Response<Graph> createEulerianGraph(int n, float edgePercentage);
 
     Graph bruteForceCreateConnected(int, float edgePercentage);
 }

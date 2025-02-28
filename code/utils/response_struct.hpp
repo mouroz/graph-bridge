@@ -12,17 +12,41 @@
  *
  * @tparam T The type of the value stored in the response
  */
+
+namespace ResponseStatus {
+    const int OK = 0;
+    const int ERROR = -1;
+};
+
 template <typename T>
 struct Response {
-    int status = 0; //default value is ok
-    T value;
+    std::string message = ""; // String empty signals
+     
+    T value; // Must have default initialization. 
+             // Assign value on initialization, otherwise a default copy is created first
+            
 
-    bool isOk() { return status == 0; }
+    bool isOk() { return message == ""; }
 
-    // Standart "not ok" value without any meaning
-    void setNotOk() { status = -1; }
-  
+    Response(std::string message, T value) : message(message), value(value) {}
+    Response(T value) : message(""), value(value) {}
+    
 };
+
+
+template <>
+struct Response<void> {
+    std::string message = ""; // String empty signals there is no error
+            
+
+    bool isOk() { return message == ""; }
+
+    Response(std::string message) : message(message) {}
+    Response() : message("") {}
+};
+
+
+
 
 
 template <typename T>
@@ -33,12 +57,9 @@ struct TimedResponse {
 
 
     bool isOk() { return error == ""; }
-    void setError(const std::string& error) { this.error = error; }
-    void setDuration(long duration) { this->duration = duration; }
     
-    T getValue() {return value;}
-    std::string getError() {return error;}
-    long getDuration() {return duration;}
+    TimedResponse(std::string message, long duration, T value) : error(message), duration(duration), value(value) {}
+    TimedResponse(long duration, T value) : error(""), duration(duration), value(value) {}
 };
 
 template <>
@@ -47,13 +68,9 @@ struct TimedResponse<void> {
     long duration = 0;
 
     bool isOk() { return error == ""; }
-    void setError(const std::string& error) { this->error = error; }
-    void setDuration(long duration) { this->duration = duration; }
 
-    // No value member for void
-    void getValue() { /* No value in this case */ }
-    std::string getError() { return error; }
-    long getDuration() { return duration; }
+    TimedResponse(std::string message, long duration) : error(message), duration(duration) {}
+    TimedResponse(long duration) : error(""), duration(duration) {}
 };
 
 #endif

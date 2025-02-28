@@ -1,5 +1,6 @@
 #include "randomizer.hpp"
 #include "graph.hpp"
+#include "response_struct.hpp"
 
 #include <algorithm>
 #include <sstream>
@@ -81,28 +82,31 @@ namespace randomgraph {
   
   }
 
-
-
-  // LIMIT of 10MB edges (Each edge is stored on linked blocks of 12 so that would give 120MB max)
-  const int EDGELIMIT = 10485760;
-  const long BASETOMB = 1048576;
-  Graph createConectedGraph(int n, int edges) {
+  Response<int> __calculateExtraEdges(int n, int edges) {
     int extraEdges = edges - n - 1;
     
     if (extraEdges >= EDGELIMIT) {
-      long valueInMB = (extraEdges/BASETOMB) * 12;
-      std::cerr << "EXCEEDED MAXIMUM SIZE (120MB) ALLOWED FOR NORMAL USE, EXPECTED: " 
+      long valueInMB = (extraEdges/BYTE_TO_MB) * 12;
+      std::ostringstream ss;
+      ss << "EXCEEDED MAXIMUM SIZE (120MB) ALLOWED FOR NORMAL USE, EXPECTED: " 
       << valueInMB << "[MB] ON END OF OPERATION" << std::endl;
-      return {};
+      return Response<int>(std::move(ss.str()), 0);
     }
+    return Response<int>(extraEdges);
+  }
 
+
+  // LIMIT of 10MB edges (Each edge is stored on linked blocks of 12 so that would give 120MB max)
+  Response<Graph> createConectedGraph(int n, int edges) {
+    Response<int> res = __calculateExtraEdges(n, edges);
+    if (!res.isOk()) return Response<Graph>(std::move(res.message), {});
+
+    int extraEdges = res.value;
     Graph graph(n);  
     std::unordered_set<std::pair<int, int>, pair_hash> edgeSet;
     edgeSet.reserve(edges);
     
     __connectEmptyGraph(graph, edgeSet);
-
-    std::cout << extraEdges << edgeSet.size() << std::endl;
 
     std::uniform_int_distribution<int> dis(0, n-1);
 
@@ -117,33 +121,27 @@ namespace randomgraph {
       }
     }
 
-    return graph;
+    return Response<Graph>(std::move(graph));
   }
 
-  Graph createConectedGraph(int n, float edgePercentage) {
-    // Calculate the total number of edges based on the percentage
-    int edges = static_cast<int>((n * (n - 1)) / 2 * edgePercentage);  // Maximum possible edges in an undirected graph
+  Response<Graph> createConectedGraph(int n, float edgePercentage) {
+    int edges = static_cast<int>((n * (n - 1)) / 2 * edgePercentage);
     return createConectedGraph(n, edges);
   }
 
 
-  Graph createEulerianGraph(int n, int edges) {
-    int extraEdges = edges - n - 1;
-   
-    if (extraEdges >= EDGELIMIT) {
-      long valueInMB = (extraEdges/BASETOMB) * 12;
-      std::cerr << "EXCEEDED MAXIMUM SIZE (120MB) ALLOWED FOR NORMAL USE, EXPECTED: " 
-      << valueInMB << "[MB] ON END OF OPERATION" << std::endl;
-      return {};
-    }
+  Response<Graph> createEulerianGraph(int n, int edges) {
+    Response<int> res = __calculateExtraEdges(n, edges);
+    if (!res.isOk()) return Response<Graph>(std::move(res.message), {});
 
+    int extraEdges = res.value;
     Graph graph(n);  
     std::unordered_set<std::pair<int, int>, pair_hash> edgeSet;
     edgeSet.reserve(edges);
     
     int u = __connectEmptyGraph(graph, edgeSet);
 
-    std::cout << extraEdges << edgeSet.size() << std::endl;
+    std::cout << extraEdges << std::endl;
 
     std::uniform_int_distribution<int> dis(0, n-1);
 
@@ -158,10 +156,10 @@ namespace randomgraph {
       }
     }
 
-    return graph;
+    return Response<Graph>(std::move(graph));
   }
 
-  Graph createEulerianGraph(int n, float edgePercentage) {
+  Response<Graph> createEulerianGraph(int n, float edgePercentage) {
     // Calculate the total number of edges based on the percentage
     int edges = static_cast<int>((n * (n - 1)) / 2 * edgePercentage);  // Maximum possible edges in an undirected graph
     return createEulerianGraph(n, edges);
@@ -169,26 +167,26 @@ namespace randomgraph {
 
 
 
-// Does not get stuck waiting for valid random number, but runs on all possible edges of the graph
-Graph bruteForceCreateConnected(int n, float edgeProbability) {
-  Graph graph(n);
+  // Does not get stuck waiting for valid random number, but runs on all possible edges of the graph
+  Graph bruteForceCreateConnected(int n, float edgeProbability) {
+    Graph graph(n);
 
-  // Add minimum requirement
-  for (int i = 1; i < n; i++) {
-    graph.addEdge(i - 1, i); 
-  }
+    // Add minimum requirement
+    for (int i = 1; i < n; i++) {
+      graph.addEdge(i - 1, i); 
+    }
 
 
-  for (int i = 0; i < n; i++) {
-    for (int j = i + 2; j < n; j++) {
-      if (randomgraph::randomBoolean(edgeProbability)) {
-        graph.addEdge(i, j);
+    for (int i = 0; i < n; i++) {
+      for (int j = i + 2; j < n; j++) {
+        if (randomgraph::randomBoolean(edgeProbability)) {
+          graph.addEdge(i, j);
+        }
       }
     }
-  }
 
-  return graph;
-}
+    return graph;
+  }
 
 
 }

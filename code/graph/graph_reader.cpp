@@ -15,54 +15,40 @@
 
 namespace graphtext {
     Response<int> read_number(std::string &s) {
-        Response<int> response;
 
         size_t pos;
         int num = std::stoi(s, &pos); // Convert to integer using std::stoi
         if (pos != s.size()) {
-            response.status = -1; // Error: Invalid number
-            return response;
+            return Response<int>("Number conversion from string to int failed", 0);
         }
 
-        response.value = num;
-        return response;
+        return Response<int>(num);
     }
 
     Response<std::vector<int>> read_numbers(std::string line) {
         std::istringstream iss(line);
         std::vector<int> numbers;
         std::string temp;
-        Response<std::vector<int>> response;
 
-
-        // for (char ch : line) {
-        //     if (!(isdigit(ch) || ch == ' ' || ch == '-' || ch == '+')) {
-        //         response.setNotOk(); 
-        //         return response;
-        //     }
-        // }
 
         // Loop extracting next inner string
         while (iss >> temp) {
             try {
                 Response<int> num = read_number(temp);
                 if (!num.isOk()) {
-                    response.setNotOk();
-                    return response;
+                    return Response<std::vector<int>>(std::move(num.message), {});
                 }
 
                 numbers.push_back(num.value); 
-            } catch (const std::invalid_argument& e) { // Invalid number format
-                response.setNotOk(); 
-                return response;
-            } catch (const std::out_of_range& e) { // Catch out-of-range exceptions
-                response.setNotOk();
-                return response;
+            } catch (const std::invalid_argument& e) {
+                return Response<std::vector<int>>("Invalid character found", {});
+
+            } catch (const std::out_of_range& e) {
+                return Response<std::vector<int>>("Out of range error", {});
             }
         }
 
-        response.value = numbers;
-        return response;
+        return Response<std::vector<int>>(numbers);
     }
 
 
@@ -138,25 +124,26 @@ namespace graphtext {
 }
 
 namespace graphformat {
-
-    // ifstream is already buffered for 4 - 8kb. 
-    // There are no extra system calls when reading numbers individually
-    Graph read_graph_from_file(std::ifstream &file) {
-        if (!file) {
-            std::cerr << "Error opening file.\n";
-            return 1;
-        }
+    long __getDuration(std::chrono::steady_clock::time_point begin, std::chrono::steady_clock::time_point end) {
+        return std::chrono::duration_cast<std::chrono::milliseconds> (end - begin).count();
+    }
+    
+    Response<Graph> readGraphFromFile(const std::string& filename, std::vector<char>& ioBuffer) {
+        std::ifstream in(filename);
+        if (!in) return Response<Graph>("Error: Could not open input file for reading", {});
+        
+        in.rdbuf()->pubsetbuf(ioBuffer.data(), ioBuffer.capacity());
 
         int number;
-        file.read(reinterpret_cast<char*>(&number), sizeof(number));
+        in.read(reinterpret_cast<char*>(&number), sizeof(number));
 
         Graph graph(number);
 
         int *buffer = new int[number];
         for (int i = 0; i < number; i++) {
             int length;
-            file.read(reinterpret_cast<char*>(&length), sizeof(int));
-            file.read(reinterpret_cast<char*>(buffer), sizeof(int) * length);
+            in.read(reinterpret_cast<char*>(&length), sizeof(int));
+            in.read(reinterpret_cast<char*>(buffer), sizeof(int) * length);
 
             for (int *ptr = buffer; ptr < buffer+length; ptr++) {
                 graph.pushEdge(i, *ptr);
@@ -164,78 +151,74 @@ namespace graphformat {
         }
 
         delete[] buffer;
-        return graph;
+        in.close();
+
+        return Response(graph);
     }
 
-    void writeToFile(const Graph& graph, std::ofstream& outFile) {
-        if (!outFile.is_open()) {
-            std::cerr << "Error: Unable to open file for writing.\n" << std::endl;
-            return;
-        }
+    TimedResponse<Graph> timedReadGraphFromFile(const std::string& filename, std::vector<char>& ioBuffer) {
+        std::chrono::steady_clock::time_point begin, end; 
+
+        begin = std::chrono::steady_clock::now();
+
+        Response<Graph> res = readGraphFromFile(filename, ioBuffer);
+        if (!res.isOk()) return TimedResponse<Graph>(std::move(res.message), 0, {});
+        
+        end = std::chrono::steady_clock::now();
+        
+
+        return TimedResponse<Graph>(__getDuration(begin, end), res.value);
+    }
+
+
+
+
+
+
+
+
+    Response<void> writeGraphToFile(const std::string& filename, std::vector<char>& ioBuffer, const Graph &graph) {
+        std::chrono::steady_clock::time_point begin, end; 
+        
+        std::ofstream out(filename, std::ios::binary | std::ios::trunc);
+        if (!out) return Response<void>("Error: Could not open output file for writing");
+    
+
+        out.rdbuf()->pubsetbuf(ioBuffer.data(), ioBuffer.capacity());
 
         // Write number of vertices
         int numVertices = graph.adj.size();
-        outFile.write(reinterpret_cast<const char*>(&numVertices), sizeof(numVertices));
+        out.write(reinterpret_cast<const char*>(&numVertices), sizeof(numVertices));
 
         // Write adjacency list
     
         for (const auto& neighbors : graph.adj) {
             int numNeighbors = neighbors.size();
-            outFile.write(reinterpret_cast<const char*>(&numNeighbors), sizeof(numNeighbors));
+            out.write(reinterpret_cast<const char*>(&numNeighbors), sizeof(numNeighbors));
 
             // Write each neighbor
             for (int neighbor : neighbors) {
-                outFile.write(reinterpret_cast<const char*>(&neighbor), sizeof(neighbor));
+                out.write(reinterpret_cast<const char*>(&neighbor), sizeof(neighbor));
             }
         }
-    }
-
-
-
-
-    long __getDuration(std::chrono::steady_clock::time_point begin, std::chrono::steady_clock::time_point end) {
-        return std::chrono::duration_cast<std::chrono::milliseconds> (end - begin).count();
-    }
-
-    TimedResponse<Graph> simpleReadGraph(const std::string& filename) {
-        size_t bufferSize = 64 * 1024;  // 64KB
-        std::vector<char> ioBuffer(bufferSize);
-
-        return readGraph(filename, ioBuffer);
-    }
-
-    TimedResponse<Graph> readGraph(const std::string& filename, std::vector<char>& ioBuffer) {
-        std::chrono::steady_clock::time_point begin, end; 
-
-        std::ifstream in(filename);
-        if (!in) return {"Error: Could not open input file for reading", 0, {}};
-        
-        in.rdbuf()->pubsetbuf(ioBuffer.data(), ioBuffer.capacity());
-
-        begin = std::chrono::steady_clock::now();
-        Graph graph = graphformat::read_graph_from_file(in);
-        in.close();
-        end = std::chrono::steady_clock::now();
-
-        return {"", __getDuration(begin, end), graph};
-    }
-
-    TimedResponse<void> writeGraph(const std::string& filename, std::vector<char>& ioBuffer, const Graph &graph) {
-        std::chrono::steady_clock::time_point begin, end; 
-        
-        std::ofstream out(filename, std::ios::binary | std::ios::trunc);
-        if (!out) return {"Error: Could not open output file for writing", 0};
-    
-
-        out.rdbuf()->pubsetbuf(ioBuffer.data(), ioBuffer.capacity());
-
-        begin = std::chrono::steady_clock::now();
-        graphformat::writeToFile(graph, out);
-        end = std::chrono::steady_clock::now();
         
         out.close();
 
-        return {"", __getDuration(begin, end)};
+        return Response<void>();
+    }
+
+
+    TimedResponse<void> timedWriteGraphToFile(const std::string& filename, std::vector<char>& ioBuffer, const Graph &graph) {
+        std::chrono::steady_clock::time_point begin, end; 
+
+        begin = std::chrono::steady_clock::now();
+
+        Response<void> res = writeGraphToFile(filename, ioBuffer, graph);
+        if (!res.isOk()) return TimedResponse<void>(std::move(res.message), 0);
+        
+        end = std::chrono::steady_clock::now();
+
+        return TimedResponse<void>(std::move(__getDuration(begin,end)));
     }
 
 }

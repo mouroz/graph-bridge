@@ -5,7 +5,7 @@
 @params graph the graph to be analyzed
 @return pair of (bool, int) where bool indicates if Eulerian path exists, and int is the starting vertex (or -1 if no path)
 */
-pair<bool, int> canHaveEulerianPath(Graph graph) {
+pair<bool, int> canHaveEulerianPath(Graph& graph) {
   int odd = 0;
   int start = -1;
   for (int i = 0; i < graph.getVertexQuantity(); i++) {

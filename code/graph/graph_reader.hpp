@@ -69,13 +69,14 @@ namespace graphformat {
 
     // ifstream is already buffered for 4 - 8kb. 
     // There are no extra system calls when reading numbers individually
-    Graph read_graph_from_file(std::ifstream &file);
-    void writeToFile(const Graph& graph, std::ofstream& outFile);
+    Graph __readGraphFromStream(std::ifstream &file);
+    Response<void> __writeToFileStream(const Graph& graph, std::ofstream& outFile);
 
     long __getDuration(std::chrono::steady_clock::time_point begin, std::chrono::steady_clock::time_point end);
-    TimedResponse<Graph> simpleReadGraph(const std::string& filename);
-    TimedResponse<Graph> readGraph(const std::string& filename, std::vector<char>& ioBuffer);
-    TimedResponse<void> writeGraph(const std::string& filename, std::vector<char>& ioBuffer, const Graph &graph);
+    Response<Graph> readGraphFromFile(const std::string& filename, std::vector<char>& ioBuffer);
+    TimedResponse<Graph> timedReadGraphFromFile(const std::string& filename, std::vector<char>& ioBuffer);
+    Response<void> writeGraphToFile(const std::string& filename, std::vector<char>& ioBuffer, const Graph &graph);
+    TimedResponse<void> timedWriteGraphToFile(const std::string& filename, std::vector<char>& ioBuffer, const Graph &graph);
 }
 
 #endif
