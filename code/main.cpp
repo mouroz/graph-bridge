@@ -114,9 +114,9 @@ int testTarjan(Graph& graph) {
 
     if(!bridges.empty()){
         std::cout << "Bridges found:\n";
-        for (auto bridge : bridges){
-            std::cout << "{ " << bridge.first << "-" << bridge.second << " }" << std::endl;
-        }
+        //for (auto bridge : bridges){
+          //  std::cout << "{ " << bridge.first << "-" << bridge.second << " }" << std::endl;
+        //}
     } else {
         std::cout << "Bridges not found!\n";
     }
@@ -173,7 +173,20 @@ Response<Graph> generateEulerianGraph() {
     std::chrono::steady_clock::time_point begin, end;
     
     begin = std::chrono::steady_clock::now();
-    Response<Graph> res = randomgraph::createEulerianGraph(1000, 80000);
+    Response<Graph> res = randomgraph::bruteForceCreateConnected(10000, 1.0f);
+    end = std::chrono::steady_clock::now();
+    
+    std::cout << "Time for Graph Generation: " << getDuration(begin, end) << "[ms]" << std::endl;
+
+    return res;
+}
+
+Response<Graph> generateEulerianGraph(int numberOfVertices) {
+    // Graph Writer
+    std::chrono::steady_clock::time_point begin, end;
+    
+    begin = std::chrono::steady_clock::now();
+    Response<Graph> res = randomgraph::bruteForceCreateConnected(numberOfVertices, 1.0f);
     end = std::chrono::steady_clock::now();
     
     std::cout << "Time for Graph Generation: " << getDuration(begin, end) << "[ms]" << std::endl;
@@ -214,33 +227,44 @@ Response<Graph> readGraph(const string& filename) {
 }
 
 int main() {
+    int quantidadeVertices = 1000;
+    for(int i = 0; i < 30; i++) {
+        cout << "I: " << i << endl;
+        Response<Graph> graph = generateEulerianGraph(quantidadeVertices);
+        if (!graph.isOk()) {
+            std::cerr << graph.message << std::endl;
+            return -1;
+        }
+        cout << "Quantity of Edges: " << endl << graph.value.getTotalQuantityEdges() << endl;
 
-    Response<Graph> graph = generateEulerianGraph();
-    if (!graph.isOk()) {
-        std::cerr << graph.message << std::endl;
-        return -1;
-    }
-
-    auto res = canHaveEulerianPath(graph.value);
-    if (res.first) {
-        std::cout << "Is eulerian" << std::endl;
-    }
-   
-    switch(2) {
-        case 0:
-            ioTest(graph.value);
-            break;
-        case 1:
-            testNaive(graph.value);
-            break;
-        case 2:
-            testTarjan(graph.value);
-            break;
-        case 3:
-            testEulerian(graph.value);
-            break;
-        default:
-            break;
+        auto res = canHaveEulerianPath(graph.value);
+        if (res.first) {
+            std::cout << "Is eulerian" << std::endl;
+        }
+        
+        switch(2) {
+            case 0:
+                ioTest(graph.value);
+                break;
+            case 1:
+                testNaive(graph.value);
+                break;
+            case 2:
+                testTarjan(graph.value);
+                break;
+            case 3:
+                testEulerian(graph.value);
+                break;
+            default:
+                break;
+            
+        }
+        //if(i >= 3){
+            quantidadeVertices += 1000;
+        /*}
+        else{
+            quantidadeVertices += 10000;
+        }*/
         
     }
 }

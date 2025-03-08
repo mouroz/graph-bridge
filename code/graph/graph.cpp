@@ -152,6 +152,14 @@ bool Graph::isEqual(const Graph& graph) {
   
 }
 
+int Graph::getTotalQuantityEdges() const {
+  int total = 0;
+  for (int i = 0; i < V; i++) {
+    total += adj[i].size();
+  }
+  return total/2;
+}
+
 
 
 

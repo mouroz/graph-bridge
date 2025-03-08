@@ -79,6 +79,8 @@ class Graph {
     void show();
 
     bool isEqual(const Graph& graph);
+
+    int getTotalQuantityEdges() const;
 };
 
 
