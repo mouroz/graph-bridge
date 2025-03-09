@@ -15,8 +15,10 @@ namespace test {
     #include "randomizer.hpp"
 
     // Function prototypes
+    int execute(const std::vector<int>& nums);
     int execute();
     int generateGraphs(const std::string& fileContext, int quantidadeVertices, float edgePercentage, std::vector<char>& ioBuffer);
+    int executeGen(const std::vector<int>& nums);
     int executeGen();
 
 }

@@ -40,9 +40,9 @@ if(NOT CMAKE_BUILD_TYPE)
 endif()
 
 # Optimization flags
-set(CMAKE_CXX_FLAGS_RELEASE "-O3 -march=native -flto -ffast-math -funroll-loops")
-set(CMAKE_CXX_FLAGS_DEBUG "-O0 -g")
-set(CMAKE_CXX_FLAGS_COMPLEXITY "-O1 -g")
+#set(CMAKE_CXX_FLAGS_RELEASE "-O3 -march=native -flto -ffast-math -funroll-loops")
+#set(CMAKE_CXX_FLAGS_DEBUG "-O0 -g")
+set(CMAKE_CXX_FLAGS_COMPLEXITY "-O0 -g")
 
 # Set compiler flags for Linux and Windows
 if(UNIX)

@@ -238,26 +238,23 @@ Response<Graph> readGraph(const string& filename) {
 }
 
 int main() {
-    //test::executeGen();
-    test::execute();
-
-    // int quantidadeVertices = 1000;
-    // for(int i = 0; i < 20; i++) {
-    //     cout << "I: " << i << endl;
-    //     Response<Graph> graph = generateEulerianGraph(quantidadeVertices);
-    //     if (!graph.isOk()) {
-    //         std::cerr << graph.message << std::endl;
-    //         return -1;
-    //     }
-    //     cout << "Quantity of Edges: " << endl << graph.value.getTotalQuantityEdges() << endl;
+    int quantidadeVertices = 1000;
+    for(int i = 0; i < 20; i++) {
+        cout << "I: " << i << endl;
+        Response<Graph> graph = generateEulerianGraph(quantidadeVertices);
+        if (!graph.isOk()) {
+            std::cerr << graph.message << std::endl;
+            return -1;
+        }
+        cout << "Quantity of Edges: " << endl << graph.value.getTotalQuantityEdges() << endl;
         
-    //     testNaive(graph.value);
-    //     testTarjan(graph.value);
-    //     Response<Graph> auxiliar = Graph::clone(graph.value);
-    //     testEulerianNaive(graph.value); 
-    //     testEulerianTarjan(auxiliar.value);
+        testNaive(graph.value);
+        testTarjan(graph.value);
+        Response<Graph> auxiliar = Graph::clone(graph.value);
+        testEulerianNaive(graph.value); 
+        testEulerianTarjan(auxiliar.value);
         
-    // }
+    }
 }
 
 
