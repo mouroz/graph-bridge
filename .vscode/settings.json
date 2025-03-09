@@ -76,7 +76,8 @@
     "variant": "cpp",
     "unordered_set": "cpp",
     "span": "cpp",
-    "text_encoding": "cpp"
+    "text_encoding": "cpp",
+    "filesystem": "cpp"
   },
   "cmake.sourceDirectory": "E:/facul/CC_Puc/graph-bridge"
 }
