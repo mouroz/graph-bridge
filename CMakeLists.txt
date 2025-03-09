@@ -28,6 +28,7 @@ set(SOURCES
     code/graph/graph.cpp
     code/graph/graph_reader.cpp
     code/utils/randomizer.cpp
+    code/test.cpp
 )
 
 # Create the executable
@@ -35,12 +36,13 @@ add_executable(MyProject ${SOURCES})
 
 # Set build type to Release by default if not specified
 if(NOT CMAKE_BUILD_TYPE)
-    set(CMAKE_BUILD_TYPE Release)
+    set(CMAKE_BUILD_TYPE Complexity)
 endif()
 
 # Optimization flags
 set(CMAKE_CXX_FLAGS_RELEASE "-O3 -march=native -flto -ffast-math -funroll-loops")
 set(CMAKE_CXX_FLAGS_DEBUG "-O0 -g")
+set(CMAKE_CXX_FLAGS_COMPLEXITY "-O1 -g")
 
 # Set compiler flags for Linux and Windows
 if(UNIX)

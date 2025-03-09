@@ -141,7 +141,7 @@ namespace randomgraph {
     
     int u = __connectEmptyGraph(graph, edgeSet);
 
-    std::cout << extraEdges << std::endl;
+    //std::cout << extraEdges << std::endl;
 
     std::uniform_int_distribution<int> dis(0, n-1);
 
