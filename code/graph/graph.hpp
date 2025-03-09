@@ -7,6 +7,7 @@
 #include <algorithm>
 #include <sstream>
 #include <random>
+#include <unordered_set>
 
 typedef std::vector<std::pair<int,int>> EdgeVector;
 /**
@@ -33,7 +34,7 @@ class Graph {
 
   public:
     int V;                            // Vertex quantity
-    std::vector<std::list<int>> adj;  // Adjascent list
+    std::vector<std::unordered_set<int>> adj;  // Adjascent unordered set
 
     Graph();
 

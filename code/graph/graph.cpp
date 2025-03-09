@@ -53,17 +53,17 @@ bool Graph::hasEdge(int u, int v){
 }
 
 void Graph::pushEdge(int u, int v) {
-  adj[u].push_back(v);
+  adj[u].insert(v);
 }
 
 void Graph::addEdge(int u, int v) {
-  adj[u].push_back(v);
-  adj[v].push_back(u);
+  adj[u].insert(v);
+  adj[v].insert(u);
 }
 
 void Graph::removeEdge(int u, int v) {
-  adj[u].remove(v);
-  adj[v].remove(u);
+  adj[u].erase(v);
+  adj[v].erase(u);
 }
 
 
@@ -121,7 +121,7 @@ std::string Graph::toString() const {
       s << "(no connections)";
     }
     for (int neighbor : adj[i]) {
-      s << neighbor << (neighbor != adj[i].back() ? ", " : "");
+      s << neighbor << ", ";
     }
     s << std::endl;
   }
