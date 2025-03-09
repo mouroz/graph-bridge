@@ -34,7 +34,7 @@ class Graph {
 
   public:
     int V;                            // Vertex quantity
-    std::vector<std::unordered_set<int>> adj;  // Adjascent unordered set
+    std::vector<std::list<int>> adj;  // Adjascent list set
 
     Graph();
 

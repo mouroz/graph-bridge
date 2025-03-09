@@ -85,7 +85,7 @@ vector<int> findEulerianPathTarjan(Graph &graph) {
         }
       }
       if (chosen == -1) {
-        chosen = *graph.adj[u].begin();
+        chosen = graph.adj[u].back();
       }
 
       stack.push(chosen);
@@ -128,7 +128,7 @@ vector<int> findEulerianPathNaive(Graph &graph) {
         }
       }
       if (chosen == -1) {
-        chosen =  *graph.adj[u].begin();
+        chosen =  graph.adj[u].back();
       }
 
       stack.push(chosen);

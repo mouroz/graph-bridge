@@ -53,17 +53,17 @@ bool Graph::hasEdge(int u, int v){
 }
 
 void Graph::pushEdge(int u, int v) {
-  adj[u].insert(v);
+  adj[u].push_back(v);
 }
 
 void Graph::addEdge(int u, int v) {
-  adj[u].insert(v);
-  adj[v].insert(u);
+  adj[u].push_back(v);
+  adj[v].push_back(u);
 }
 
 void Graph::removeEdge(int u, int v) {
-  adj[u].erase(v);
-  adj[v].erase(u);
+  adj[u].remove(v);
+  adj[v].remove(u);
 }
 
 
