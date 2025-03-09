@@ -51,3 +51,6 @@ MyProject.exe
 *.ninja
 .ninja_deps
 .ninja_log
+
+# Folder examples
+examples/

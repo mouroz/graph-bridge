@@ -183,6 +183,7 @@ namespace graphformat {
         std::ofstream out(filename, std::ios::binary | std::ios::trunc);
         if (!out) return Response<void>("Error: Could not open output file for writing");
     
+        ioBuffer.clear();
 
         out.rdbuf()->pubsetbuf(ioBuffer.data(), ioBuffer.capacity());
 

@@ -33,6 +33,15 @@ set(SOURCES
 # Create the executable
 add_executable(MyProject ${SOURCES})
 
+# Set build type to Release by default if not specified
+if(NOT CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE Release)
+endif()
+
+# Optimization flags
+set(CMAKE_CXX_FLAGS_RELEASE "-O3 -march=native -flto -ffast-math -funroll-loops")
+set(CMAKE_CXX_FLAGS_DEBUG "-O0 -g")
+
 # Set compiler flags for Linux and Windows
 if(UNIX)
     target_compile_options(MyProject PRIVATE -Wall -Wextra -Wpedantic)

@@ -14,7 +14,8 @@
 
 
 namespace randomgraph {
-    const int EDGELIMIT = 10485760;
+    const int _512MB = 536870912;
+    const int EDGELIMIT = 536870912/12;
     const long BYTE_TO_MB = 1048576;
     
     struct pair_hash {

@@ -1,0 +1,17 @@
+# examples/10000/0.graph
+read time: 497297071[ns]
+
+## TARJAN
+[0]: 120055764[ns] -> No bridges found
+[1]: 41081236[ns] -> No bridges found
+[2]: 40321621[ns] -> No bridges found
+[3]: 40189852[ns] -> No bridges found
+[4]: 39870699[ns] -> No bridges found
+[5]: 39989032[ns] -> No bridges found
+[6]: 39670841[ns] -> No bridges found
+[7]: 40419715[ns] -> No bridges found
+[8]: 40388476[ns] -> No bridges found
+[9]: 40839699[ns] -> No bridges found
+Average time: 48282693[ns]
+
+## NAIVE
