@@ -180,12 +180,15 @@ int testEulerianNaive(Graph& graph) {
 
 
 
-Response<Graph> generateEulerianGraph() {
+
+
+
+Response<Graph> generateEulerianGraph(int numberOfVertices, float chance) {
     // Graph Writer
     std::chrono::steady_clock::time_point begin, end;
     
     begin = std::chrono::steady_clock::now();
-    Response<Graph> res = randomgraph::createEulerianGraph(100, 0.05f);
+    Response<Graph> res = randomgraph::createEulerianGraph(numberOfVertices, chance);
     end = std::chrono::steady_clock::now();
     
     std::cout << "Time for Graph Generation: " << getDuration(begin, end) << "[ns]" << std::endl;
@@ -194,17 +197,13 @@ Response<Graph> generateEulerianGraph() {
 }
 
 Response<Graph> generateEulerianGraph(int numberOfVertices) {
-    // Graph Writer
-    std::chrono::steady_clock::time_point begin, end;
-    
-    begin = std::chrono::steady_clock::now();
-    Response<Graph> res = randomgraph::createEulerianGraph(numberOfVertices, 0.003f);
-    end = std::chrono::steady_clock::now();
-    
-    std::cout << "Time for Graph Generation: " << getDuration(begin, end) << "[ns]" << std::endl;
-
-    return res;
+    return generateEulerianGraph(numberOfVertices, 0.003f);
 }
+
+Response<Graph> generateEulerianGraph() {
+    return generateEulerianGraph(100, 0.05f);
+}
+
 
 Response<Graph> generateConnectedGraph() {
     // Graph Writer
@@ -239,7 +238,7 @@ Response<Graph> readGraph(const string& filename) {
 }
 
 int main() {
-    
+    //test::executeGen();
     test::execute();
 
     // int quantidadeVertices = 1000;

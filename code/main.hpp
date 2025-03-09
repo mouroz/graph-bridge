@@ -23,6 +23,7 @@ int testEulerianTarjan(Graph& graph);
 int testEulerianNaive(Graph& graph);
 Response<Graph> generateEulerianGraph();
 Response<Graph> generateEulerianGraph(int numberOfVertices);
+Response<Graph> generateEulerianGraph(int numberOfVertices, float chance);
 Response<Graph> generateConnectedGraph();
 void executeTest(int i, Graph& graph);
 

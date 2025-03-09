@@ -16,6 +16,8 @@ namespace test {
 
     // Function prototypes
     int execute();
+    int generateGraphs(const std::string& fileContext, int quantidadeVertices, float edgePercentage, std::vector<char>& ioBuffer);
+    int executeGen();
 
 }
 
