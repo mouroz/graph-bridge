@@ -81,6 +81,9 @@ class Graph {
     bool isEqual(const Graph& graph);
 
     int getTotalQuantityEdges() const;
+
+    /// @brief Creates a deep copy of the given graph
+    static Graph clone(const Graph& original);
 };
 
 

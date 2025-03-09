@@ -1,5 +1,6 @@
 #include "eulerian.hpp"
 
+
 /*
 @brief this method checks if there's a possibility of existence of an eulerian path in the graph
 @params graph the graph to be analyzed
@@ -16,6 +17,7 @@ pair<bool, int> canHaveEulerianPath(Graph& graph) {
       }
     }
   }
+  //cout << "Odd: " << odd << endl;
   if (odd == 0) {
     // Eulerian circuit, can start anywhere
     return {true, 0};
@@ -50,7 +52,8 @@ bool isEdgeBridge(int u, int v, const EdgeVector &bridges) {
 @param graph The graph to be analyzed
 @return A list of vertices representing the Eulerian path, or an empty list if no path exists
 */
-vector<int> findEulerianPath(Graph &graph) {
+vector<int> findEulerianPathTarjan(Graph &graph) {
+
   vector<int> path;
   pair<bool, int> result = canHaveEulerianPath(graph);
   bool hasPath = result.first;
@@ -72,6 +75,49 @@ vector<int> findEulerianPath(Graph &graph) {
       stack.pop();
     } else {
       EdgeVector bridges = tarjan(graph);
+
+      int chosen = -1;
+
+      for (int v : graph.adj[u]) {
+        if (bridges.empty() || !isEdgeBridge(u, v, bridges)) {
+          chosen = v;
+          break;
+        }
+      }
+      if (chosen == -1) {
+        chosen = graph.adj[u].front();
+      }
+
+      stack.push(chosen);
+      graph.removeEdge(u, chosen);
+    }
+  }
+
+  return path;
+}
+
+vector<int> findEulerianPathNaive(Graph &graph) {
+  vector<int> path;
+  pair<bool, int> result = canHaveEulerianPath(graph);
+  bool hasPath = result.first;
+  int startVertex = result.second;
+  
+  if (!hasPath) {
+    return path; // Return empty path if no Eulerian path exists
+  }
+
+
+  stack<int> stack;
+  stack.push(startVertex);
+
+  while (!stack.empty()) {
+    int u = stack.top();
+
+    if (graph.adj[u].size() == 0) {
+      path.push_back(u);
+      stack.pop();
+    } else {
+      EdgeVector bridges = executeNaive(graph);
 
       int chosen = -1;
 

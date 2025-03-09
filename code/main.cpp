@@ -99,7 +99,7 @@ int testNaive(Graph& graph) {
     }
 
     std::cout << "Naive execution time for " << graph.V << " vertices = " 
-    <<  getDuration(begin, end) << "[ms]" << std::endl;
+    <<  getDuration(begin, end) << " [ms]" << std::endl;
 
     return 0;
 }
@@ -123,49 +123,60 @@ int testTarjan(Graph& graph) {
     }
 
     std::cout << "Tarjan execution time for " << graph.V << " vertices = " 
-    << getDuration(begin, end) << "[ms]" << std::endl;
+    << getDuration(begin, end) << " [ms]" << std::endl;
 
     return 0;
 }
 
-int testEulerian(Graph& graph) {
+int testEulerianTarjan(Graph& graph) {
     std::chrono::steady_clock::time_point begin, end;
 
-    // Check if can have eulerian path
     begin = std::chrono::steady_clock::now();
     pair<bool, int> result = canHaveEulerianPath(graph);
     end = std::chrono::steady_clock::now();
-    
-    std::cout << "Can have Eulerian path: " << (result.first ? "Yes" : "No") << endl;
-    std::cout << getDuration(begin, end) << "[ms]" << std::endl;
 
-    // Find bridges
-    std::cout << "Bridges in the graph:" << std::endl;
-    
-    begin = std::chrono::steady_clock::now();
-    EdgeVector bridges = tarjan(graph);
-    end = std::chrono::steady_clock::now();
-    
-    std::cout << edgelist_to_string(bridges) << std::endl;
-    std::cout << getDuration(begin, end) << "[ms]" << std::endl;
+    std::cout << "Can have Eulerian path: " << (result.first ? "Yes" : "No") << std::endl;
+    std::cout << "Eulerian Verification Time (Tarjan): " << getDuration(begin, end) << " [ms]" << std::endl;
 
     // Get eulerian path
-    std::cout << "Eulerian path:" << std::endl;
     begin = std::chrono::steady_clock::now();
-    vector<int> path = findEulerianPath(graph);
-    for (size_t i = 0; i < path.size(); i++) {
+    vector<int> path = findEulerianPathTarjan(graph);
+    end = std::chrono::steady_clock::now();
+    /*for (size_t i = 0; i < path.size(); i++) {
         std::cout << path[i];
         if (i < path.size() - 1) {
             std::cout << " -> ";
         }
-    }
-    end = std::chrono::steady_clock::now();
-    std::cout << getDuration(begin, end) << "[ms]" << std::endl;
-
+    }*/
+    std::cout << "Eulerian Time Tarjan: "  << getDuration(begin, end) << " [ms]" << std::endl;
+    
     return 0;
 }
 
+int testEulerianNaive(Graph& graph) {
+    std::chrono::steady_clock::time_point begin, end;
 
+    begin = std::chrono::steady_clock::now();
+    pair<bool, int> result = canHaveEulerianPath(graph);
+    end = std::chrono::steady_clock::now();
+  
+    std::cout << "Can have Eulerian path: " << (result.first ? "Yes" : "No") << std::endl;
+    std::cout << "Eulerian Verification Time (Naive): " << getDuration(begin, end) << " [ms]" << std::endl;
+
+    //Get eulerian path
+    begin = std::chrono::steady_clock::now();
+    vector<int> path = findEulerianPathNaive(graph);
+    end = std::chrono::steady_clock::now();
+    /*for (size_t i = 0; i < path.size(); i++) {
+        std::cout << path[i];
+        if (i < path.size() - 1) {
+            std::cout << " -> ";
+        }
+    }*/
+
+    std::cout << "Eulerian Time Naive: " << getDuration(begin, end) << " [ms]"<< std::endl;
+    return 0;
+}
 
 
 
@@ -174,7 +185,7 @@ Response<Graph> generateEulerianGraph() {
     std::chrono::steady_clock::time_point begin, end;
     
     begin = std::chrono::steady_clock::now();
-    Response<Graph> res = randomgraph::bruteForceCreateConnected(10000, 1.0f);
+    Response<Graph> res = randomgraph::createEulerianGraph(100, 0.05f);
     end = std::chrono::steady_clock::now();
     
     std::cout << "Time for Graph Generation: " << getDuration(begin, end) << "[ms]" << std::endl;
@@ -187,7 +198,7 @@ Response<Graph> generateEulerianGraph(int numberOfVertices) {
     std::chrono::steady_clock::time_point begin, end;
     
     begin = std::chrono::steady_clock::now();
-    Response<Graph> res = randomgraph::createConectedGraph(numberOfVertices, 0.05f);
+    Response<Graph> res = randomgraph::createEulerianGraph(numberOfVertices, 0.005f);
     end = std::chrono::steady_clock::now();
     
     std::cout << "Time for Graph Generation: " << getDuration(begin, end) << "[ms]" << std::endl;
@@ -200,10 +211,10 @@ Response<Graph> generateConnectedGraph() {
     std::chrono::steady_clock::time_point begin, end;
     
     begin = std::chrono::steady_clock::now();
-    Response<Graph> res = randomgraph::createConectedGraph(100000, 0.001f);
+    Response<Graph> res = randomgraph::createConectedGraph(5, 0.001f);
     end = std::chrono::steady_clock::now();
     
-    std::cout << "Time for Graph Generation: " << getDuration(begin, end) << "[ms]" << std::endl;
+    std::cout << "Time for Graph Generation: " << getDuration(begin, end) << "   [ms]" << std::endl;
 
     return res;
 }
@@ -223,66 +234,37 @@ void executeTest(int i, Graph& graph) {
             testTarjan(graph);
             break;
         case 3:
-            testEulerian(graph);
+            testEulerianNaive(graph);
             break;
         default:
             break;
     }
 }
 
-int storeGraph(Graph& graph, std::string filename, std::vector<char> ioBuffer) {
-    std::chrono::steady_clock::time_point begin, end;     
 
-    begin = std::chrono::steady_clock::now();
-    Response<void> writeResult = graphformat::writeGraphToFile(filename, ioBuffer, graph);
-    end = std::chrono::steady_clock::now();
-
-
-    if (!writeResult.isOk()) {
-        std::cerr << writeResult.message << std::endl;
-        return -1;
-    } 
-    
-    std::cout << "write time: " << getDuration(begin,end) << "[ms]" << std::endl;
-    ioBuffer.clear();
-    return 0;
-}
-
-int generateGraphs() {
-    std::filesystem::create_directory("examples");
-    std::filesystem::create_directory("examples/100");
-    std::string filenameContext = "examples/100/";
-
-
-    const size_t bufferSize = 64 * 1024;  // 64KB
-    std::vector<char> ioBuffer(bufferSize);
-    
-
-    int quantidadeVertices = 100;
-    for(int i = 0; i < 10; i++) {
+int main() {
+    int quantidadeVertices = 1000;
+    for(int i = 0; i < 20; i++) {
         cout << "I: " << i << endl;
         Response<Graph> graph = generateEulerianGraph(quantidadeVertices);
         if (!graph.isOk()) {
             std::cerr << graph.message << std::endl;
             return -1;
         }
-
-        std::cout << "graph generated" << std::endl;
-
-        //std::cout << graph.value.getEdgeQuantity() << std::endl;
-        std::string filename = filenameContext + std::to_string(i) + ".graph";
-        std::cout << filename << std::endl;
-
-        storeGraph(graph.value, filename, ioBuffer);
+        cout << "Quantity of Edges: " << endl << graph.value.getTotalQuantityEdges() << endl;
         
+        testNaive(graph.value);
+        testTarjan(graph.value);
+        Response<Graph> auxiliar = Graph::clone(graph.value);
+        testEulerianNaive(graph.value); 
+        testEulerianTarjan(auxiliar.value);
+
 
 
         cout << "Quantity of Edges: " << endl << graph.value.getTotalQuantityEdges() << endl;
     }
     return 0;
 }
-
-
 
 
 

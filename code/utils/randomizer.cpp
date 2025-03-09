@@ -147,7 +147,7 @@ namespace randomgraph {
 
     while (extraEdges > 0) {
       int v = dis(gen);
-      std::cout << "V: " << v << std::endl;
+      //std::cout << "V: " << v << std::endl;
       if (u != v && edgeSet.find({u, v}) == edgeSet.end()) {
         graph.addEdge(u, v);
         edgeSet.insert({u, v});

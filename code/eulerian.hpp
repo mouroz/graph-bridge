@@ -3,10 +3,11 @@
 
 #include <iostream>
 #include <stack>
+#include <chrono>
 #include "tarjan.hpp"
+#include "naive.hpp"
 #include "graph_reader.hpp"
 #include "graph.hpp"
-
 using namespace std;
 
 /*
@@ -19,6 +20,8 @@ pair<bool, int> canHaveEulerianPath(Graph& graph);
 @param graph The graph to be analyzed
 @return A list of vertices representing the Eulerian path, or an empty list if no path exists
 */
-vector<int> findEulerianPath(Graph& graph);
+vector<int> findEulerianPathTarjan(Graph& graph);
+
+vector<int> findEulerianPathNaive(Graph& graph);
 
 #endif // EULERIAN_PATH_H

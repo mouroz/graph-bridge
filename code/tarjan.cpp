@@ -37,12 +37,13 @@ TarjanData::~TarjanData() {
 EdgeVector tarjan(const Graph &graph) {
     TarjanData args(graph);
     //iteration in all vertex to make sure every vertex will be visited, even if the graph isn't connected
-    for (int i = 0; i < graph.getVertexQuantity(); ++i) {
+    /*for (int i = 0; i < graph.getVertexQuantity(); ++i) {
         if (!wasVisited(i, &args)) {
-            _dfs(&args, i);
+           
         }
-    }
+    }*/
     // _dfs(&args, 0, -1);
+    _dfs(&args, 0);
     return args.bridges;
 }
 

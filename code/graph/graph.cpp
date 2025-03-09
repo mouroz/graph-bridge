@@ -160,6 +160,14 @@ int Graph::getTotalQuantityEdges() const {
   return total/2;
 }
 
+Graph Graph::clone(const Graph& original) {
+  Graph newGraph(original.V);
+  for (int i = 0; i < original.V; ++i) {
+    newGraph.adj[i] = original.adj[i];
+  }
+  return newGraph;
+}
+
 
 
 
